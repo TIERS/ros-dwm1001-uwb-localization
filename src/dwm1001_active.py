@@ -32,6 +32,8 @@ class dwm1001_localizer:
         # Get port and tag name
         self.dwm_port = rospy.get_param('~port')
         self.tag_name = rospy.get_param('~tag_name')
+        self.network = rospy.get_param('~network', "default")
+        self.verbose = rospy.get_param('~verbose', False)
         
         # Set a ROS rate
         self.rate = rospy.Rate(1)
@@ -126,9 +128,11 @@ class dwm1001_localizer:
             for i in range(number_of_anchors) :
 
                 node_id = arrayData[2+6*i]
+                first_time = False
                 if node_id not in self.topics :
-                    self.topics[node_id] = rospy.Publisher('/dwm1001/anchor/'+node_id+"/position", Pose, queue_size=100)
-                    self.topics[node_id+"_dist"] = rospy.Publisher('/dwm1001/tag/'+self.tag_name+'/to/anchor/'+node_id+"/distance", Float64, queue_size=100)
+                    first_time = True
+                    self.topics[node_id] = rospy.Publisher('/dwm1001/'+self.network+'/anchor/'+node_id+"/position", Pose, queue_size=100)
+                    self.topics[node_id+"_dist"] = rospy.Publisher('/dwm1001/'+self.network+'/tag/'+self.tag_name+'/to/anchor/'+node_id+"/distance", Float64, queue_size=100)
 
                 try :
 	                p = Pose()
@@ -148,19 +152,22 @@ class dwm1001_localizer:
                 except :
                 	pass
 
-                rospy.loginfo("Anchor " + node_id + ": "
-                              + " x: "
-                              + str(p.position.x)
-                              + " y: "
-                              + str(p.position.y)
-                              + " z: "
-                              + str(p.position.z))
+                if self.verbose or first_time :
+                    rospy.loginfo("Anchor " + node_id + ": "
+                                  + " x: "
+                                  + str(p.position.x)
+                                  + " y: "
+                                  + str(p.position.y)
+                                  + " z: "
+                                  + str(p.position.z))
 
             # Now publish the position of the tag itself
             if "POS" in arrayData[-5] :
 
                 # Topic is now a tag with same name as node_id
+                first_time = False
                 if self.tag_name not in self.topics :
+                    first_time = True
                     self.topics[self.tag_name] = rospy.Publisher('/dwm1001/tag/'+self.tag_name+"/position", Pose, queue_size=100)
                 p = Pose()
                 p.position.x = float(arrayData[-4])
@@ -172,13 +179,14 @@ class dwm1001_localizer:
                 p.orientation.w = 1.0
                 self.topics[self.tag_name].publish(p)
 
-                rospy.loginfo("Tag " + self.tag_name + ": "
-                              + " x: "
-                              + str(p.position.x)
-                              + " y: "
-                              + str(p.position.y)
-                              + " z: "
-                              + str(p.position.z))
+                if self.verbose or first_time :
+                    rospy.loginfo("Tag " + self.tag_name + ": "
+                                  + " x: "
+                                  + str(p.position.x)
+                                  + " y: "
+                                  + str(p.position.y)
+                                  + " z: "
+                                  + str(p.position.z))
 
     def initializeDWM1001API(self):
         """
@@ -205,6 +213,6 @@ if __name__ == '__main__':
     try:
         dwm1001 = dwm1001_localizer()
         dwm1001.main()
-        rospy.spin()
+        #rospy.spin()
     except rospy.ROSInterruptException:
         pass
