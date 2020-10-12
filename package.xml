@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>ros-dwm1001-uwb-tag-drivers</name>
+  <name>dwm1001_uwb_tag_drivers</name>
   <version>0.0.0</version>
   <description>The ros-dwm1001-uwb-tag-drivers package</description>
 
