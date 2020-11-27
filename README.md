@@ -40,18 +40,19 @@ This repository contains ROS nodes written in Python to interface with the two t
 
 The active tags publishes anchor positions to `/dwm1001/anchor/AN*/position`, and its own position and distances to anchors to `/dwm1001/tag/tag_name/position` and `/dwm1001/tag/tag_name/to/anchor/AN*/distance`, respectively. The __tag_name_ is given as a parameter.
 
-## Usage
+## Run
 
-Copy the __dwm1001_interface__ folder under `your_catkin_ws/src/`. Then simply run for an active tag:
+Then simply run for an active tag (after checking which port it is connected to, usually starting from `/dev/ttyACM0`):
 
 ```
-rosrun dwm1001_interface dwm1001_active.py _port:=/dev/ttyACM*/ _tag_name:="your_tag_name"
+source ~/uwb_ws/devel/setup.bash
+rosrun dwm1001_uwb_tag_drivers dwm1001_active _port:=/dev/ttyACMX/ _tag_name:="your_tag_name"
 ``` 
 
 or for a passive tag:
 
 ```
-rosrun dwm1001_interface dwm1001_passive.py _port:=/dev/ttyACM*/
+rosrun dwm1001_uwb_tag_drivers dwm1001_passive _port:=/dev/ttyACMX/
 ```
 
 with the corresponding port where the UWB tag is connected. The `tag_name` is only used for the topic names.
