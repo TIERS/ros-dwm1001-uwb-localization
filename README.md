@@ -12,6 +12,13 @@ mkdir -p  ~/uwb_ws/src && cd ~/uwb_ws/src
 git clone https://github.com/TIERS/ros-dwm1001-uwb-localization.git
 ```
 
+and install dependencies
+```
+sudo apt install python-dev python-pip
+sudo -H python -m pip install --upgrade pip
+sudo -H python -m pip install pyserial
+```
+
 Then build the workspace. We recommend using `catkin build`. Install it if needed with
 ```
 sudo apt install python-catkin-tools
