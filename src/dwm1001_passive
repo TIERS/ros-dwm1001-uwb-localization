@@ -40,6 +40,7 @@ class dwm1001_localizer:
         
         # Serial port settings
         self.dwm_port = rospy.get_param('~port')
+        self.verbose = rospy.get_param('~verbose', True)
         self.serialPortDWM1001 = serial.Serial(
             port = self.dwm_port,
             baudrate = 115200,
@@ -121,8 +122,6 @@ class dwm1001_localizer:
         if "POS" in arrayData[0] :
 
             tag_id = arrayData[2]
-            if tag_id not in self.topics :
-                self.topics[tag_id] = rospy.Publisher('/dwm1001/tag/'+tag_id+"/position", Pose, queue_size=100)
 
             p = Pose()
             p.position.x = float(arrayData[3])
@@ -132,15 +131,27 @@ class dwm1001_localizer:
             p.orientation.y = 0.0
             p.orientation.z = 0.0
             p.orientation.w = 1.0
+
+            if tag_id not in self.topics :
+                self.topics[tag_id] = rospy.Publisher('/dwm1001/tag/'+tag_id+"/position", Pose, queue_size=100)
+                rospy.loginfo("New tag {}. x: {}m, y: {}m, z: {}m".format(
+                    tag_id,
+                    p.position.x,
+                    p.position.y,
+                    p.position.z
+                ))
+            
             self.topics[tag_id].publish(p)
 
-            rospy.loginfo("Tag " + tag_id + ": "
-                          + " x: "
-                          + str(p.position.x)
-                          + " y: "
-                          + str(p.position.y)
-                          + " z: "
-                          + str(p.position.z))
+            if self.verbose :
+                rospy.loginfo("Tag " + tag_id + ": "
+                    + " x: "
+                    + str(p.position.x)
+                    + " y: "
+                    + str(p.position.y)
+                    + " z: "
+                    + str(p.position.z)
+                )
 
 
 
