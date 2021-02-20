@@ -131,26 +131,41 @@ class dwm1001_localizer:
                 first_time = False
                 if node_id not in self.topics :
                     first_time = True
-                    self.topics[node_id] = rospy.Publisher('/dwm1001/'+self.network+'/anchor/'+node_id+"/position", Pose, queue_size=100)
-                    self.topics[node_id+"_dist"] = rospy.Publisher('/dwm1001/'+self.network+'/tag/'+self.tag_name+'/to/anchor/'+node_id+"/distance", Float64, queue_size=100)
-
+                    if self.use_network :
+                        self.topics[node_id] = rospy.Publisher(
+                            '/dwm1001' + 
+                            "".format("/"+self.network if self.use_network else "") + 
+                            '/anchor/' + node_id + 
+                            "/position", 
+                            Pose, 
+                            queue_size=100
+                        )
+                        self.topics[node_id+"_dist"] = rospy.Publisher(
+                            '/dwm1001' + 
+                            "".format("/"+self.network if self.use_network else "") + 
+                            '/tag/' + self.tag_name +
+                            '/to/anchor/' + node_id +
+                            "/distance", 
+                            Float64, 
+                            queue_size=100
+                        )
                 try :
-	                p = Pose()
-	                p.position.x = float(arrayData[4+6*i])
-	                p.position.y = float(arrayData[5+6*i])
-	                p.position.z = float(arrayData[6+6*i])
-	                p.orientation.x = 0.0
-	                p.orientation.y = 0.0
-	                p.orientation.z = 0.0
-	                p.orientation.w = 1.0
-	                self.topics[node_id].publish(p)
-            	except :
-            		pass
-                try :
-                	dist = float(arrayData[7+6*i])
-                	self.topics[node_id+"_dist"].publish(dist)
+                    p = Pose()
+                    p.position.x = float(arrayData[4+6*i])
+                    p.position.y = float(arrayData[5+6*i])
+                    p.position.z = float(arrayData[6+6*i])
+                    p.orientation.x = 0.0
+                    p.orientation.y = 0.0
+                    p.orientation.z = 0.0
+                    p.orientation.w = 1.0
+                    self.topics[node_id].publish(p)
                 except :
-                	pass
+                    pass
+                try :
+                    dist = float(arrayData[7+6*i])
+                    self.topics[node_id+"_dist"].publish(dist)
+                except :
+                    pass
 
                 if self.verbose or first_time :
                     rospy.loginfo("Anchor " + node_id + ": "

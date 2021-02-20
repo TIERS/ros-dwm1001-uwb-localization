@@ -1,0 +1,7 @@
+<launch>
+
+    <node name="DWM1001_Passive" pkg="dwm1001_uwb_tag_drivers" type="dwm1001_passive" respawn="true" output="screen">
+        <rosparam file="$(find dwm1001_uwb_tag_drivers)/config/params.yaml" command="load"/>
+    </node>
+
+</launch>
