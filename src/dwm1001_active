@@ -32,6 +32,7 @@ class dwm1001_localizer:
         # Get port and tag name
         self.dwm_port = rospy.get_param('~port')
         self.tag_name = rospy.get_param('~tag_name')
+	self.use_network = rospy.get_param('~use_network', False)
         self.network = rospy.get_param('~network', "default")
         self.verbose = rospy.get_param('~verbose', False)
         
