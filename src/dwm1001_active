@@ -12,9 +12,11 @@ __status__     = "Development"
 import rospy, time, serial, os, sys, random
 
 from geometry_msgs.msg  import Pose
+from geometry_msgs.msg  import PoseStamped
 from std_msgs.msg       import Float64
 
 from dwm1001_apiCommands import DWM1001_API_COMMANDS
+
 
 
 
@@ -138,7 +140,7 @@ class dwm1001_localizer:
                             "".format("/"+self.network if self.use_network else "") + 
                             '/anchor/' + node_id + 
                             "/position", 
-                            Pose, 
+                            PoseStamped, 
                             queue_size=100
                         )
                         self.topics[node_id+"_dist"] = rospy.Publisher(
@@ -151,14 +153,14 @@ class dwm1001_localizer:
                             queue_size=100
                         )
                 try :
-                    p = Pose()
-                    p.position.x = float(arrayData[4+6*i])
-                    p.position.y = float(arrayData[5+6*i])
-                    p.position.z = float(arrayData[6+6*i])
-                    p.orientation.x = 0.0
-                    p.orientation.y = 0.0
-                    p.orientation.z = 0.0
-                    p.orientation.w = 1.0
+                    p = PoseStamped()
+                    p.pose.position.x = float(arrayData[4+6*i])
+                    p.pose.position.y = float(arrayData[5+6*i])
+                    p.pose.position.z = float(arrayData[6+6*i])
+                    p.pose.orientation.x = 0.0
+                    p.pose.orientation.y = 0.0
+                    p.pose.orientation.z = 0.0
+                    p.pose.orientation.w = 1.0
                     self.topics[node_id].publish(p)
                 except :
                     pass
@@ -171,11 +173,11 @@ class dwm1001_localizer:
                 if self.verbose or first_time :
                     rospy.loginfo("Anchor " + node_id + ": "
                                   + " x: "
-                                  + str(p.position.x)
+                                  + str(p.pose.position.x)
                                   + " y: "
-                                  + str(p.position.y)
+                                  + str(p.pose.position.y)
                                   + " z: "
-                                  + str(p.position.z))
+                                  + str(p.pose.position.z))
 
             # Now publish the position of the tag itself
             if "POS" in arrayData[-5] :
@@ -184,25 +186,25 @@ class dwm1001_localizer:
                 first_time = False
                 if self.tag_name not in self.topics :
                     first_time = True
-                    self.topics[self.tag_name] = rospy.Publisher('/dwm1001/tag/'+self.tag_name+"/position", Pose, queue_size=100)
-                p = Pose()
-                p.position.x = float(arrayData[-4])
-                p.position.y = float(arrayData[-3])
-                p.position.z = float(arrayData[-2])
-                p.orientation.x = 0.0
-                p.orientation.y = 0.0
-                p.orientation.z = 0.0
-                p.orientation.w = 1.0
+                    self.topics[self.tag_name] = rospy.Publisher('/dwm1001/tag/'+self.tag_name+"/position", PoseStamped, queue_size=100)
+                p = PoseStamped()
+                p.pose.position.x = float(arrayData[-4])
+                p.pose.position.y = float(arrayData[-3])
+                p.pose.position.z = float(arrayData[-2])
+                p.pose.orientation.x = 0.0
+                p.pose.orientation.y = 0.0
+                p.pose.orientation.z = 0.0
+                p.pose.orientation.w = 1.0
                 self.topics[self.tag_name].publish(p)
 
                 if self.verbose or first_time :
                     rospy.loginfo("Tag " + self.tag_name + ": "
                                   + " x: "
-                                  + str(p.position.x)
+                                  + str(p.pose.position.x)
                                   + " y: "
-                                  + str(p.position.y)
+                                  + str(p.pose.position.y)
                                   + " z: "
-                                  + str(p.position.z))
+                                  + str(p.pose.position.z))
 
     def initializeDWM1001API(self):
         """

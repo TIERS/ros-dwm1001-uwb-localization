@@ -13,6 +13,7 @@ import rospy, time, serial, os
 from dwm1001_apiCommands            import DWM1001_API_COMMANDS
 
 from geometry_msgs.msg import Pose
+from geometry_msgs.msg import PoseStamped
 
 
 # initialize ros rate 10hz
@@ -123,22 +124,23 @@ class dwm1001_localizer:
 
             tag_id = arrayData[2]
 
-            p = Pose()
-            p.position.x = float(arrayData[3])
-            p.position.y = float(arrayData[4])
-            p.position.z = float(arrayData[5])
-            p.orientation.x = 0.0
-            p.orientation.y = 0.0
-            p.orientation.z = 0.0
-            p.orientation.w = 1.0
+            p = PoseStamped()
+            p.pose.position.x = float(arrayData[3])
+            p.pose.position.y = float(arrayData[4])
+            p.pose.position.z = float(arrayData[5])
+            p.pose.orientation.x = 0.0
+            p.pose.orientation.y = 0.0
+            p.pose.orientation.z = 0.0
+            p.pose.orientation.w = 1.0
+            p.header.stamp = rospy.Time.now()    
 
             if tag_id not in self.topics :
-                self.topics[tag_id] = rospy.Publisher('/dwm1001/tag/'+tag_id+"/position", Pose, queue_size=100)
+                self.topics[tag_id] = rospy.Publisher('/dwm1001/tag/'+tag_id+"/position", PoseStamped, queue_size=100)
                 rospy.loginfo("New tag {}. x: {}m, y: {}m, z: {}m".format(
                     tag_id,
-                    p.position.x,
-                    p.position.y,
-                    p.position.z
+                    p.pose.position.x,
+                    p.pose.position.y,
+                    p.pose.position.z
                 ))
             
             self.topics[tag_id].publish(p)
@@ -146,11 +148,11 @@ class dwm1001_localizer:
             if self.verbose :
                 rospy.loginfo("Tag " + tag_id + ": "
                     + " x: "
-                    + str(p.position.x)
+                    + str(p.pose.position.x)
                     + " y: "
-                    + str(p.position.y)
+                    + str(p.pose.position.y)
                     + " z: "
-                    + str(p.position.z)
+                    + str(p.pose.position.z)
                 )
 
 
