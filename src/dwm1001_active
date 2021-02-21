@@ -134,24 +134,23 @@ class dwm1001_localizer:
                 first_time = False
                 if node_id not in self.topics :
                     first_time = True
-                    if self.use_network :
-                        self.topics[node_id] = rospy.Publisher(
-                            '/dwm1001' + 
-                            "".format("/"+self.network if self.use_network else "") + 
-                            '/anchor/' + node_id + 
-                            "/position", 
-                            PoseStamped, 
-                            queue_size=100
-                        )
-                        self.topics[node_id+"_dist"] = rospy.Publisher(
-                            '/dwm1001' + 
-                            "".format("/"+self.network if self.use_network else "") + 
-                            '/tag/' + self.tag_name +
-                            '/to/anchor/' + node_id +
-                            "/distance", 
-                            Float64, 
-                            queue_size=100
-                        )
+                    self.topics[node_id] = rospy.Publisher(
+                        '/dwm1001' + 
+                        "".format("/"+self.network if self.use_network else "") + 
+                        '/anchor/' + node_id + 
+                        "/position", 
+                        PoseStamped, 
+                        queue_size=100
+                    )
+                    self.topics[node_id+"_dist"] = rospy.Publisher(
+                        '/dwm1001' + 
+                        "".format("/"+self.network if self.use_network else "") + 
+                        '/tag/' + self.tag_name +
+                        '/to/anchor/' + node_id +
+                        "/distance", 
+                        Float64, 
+                        queue_size=100
+                    )
                 try :
                     p = PoseStamped()
                     p.pose.position.x = float(arrayData[4+6*i])
