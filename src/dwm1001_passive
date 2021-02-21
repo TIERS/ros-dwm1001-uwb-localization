@@ -1,27 +1,13 @@
 #!/usr/bin/env python
-""" For more info on the documentation go to https://www.decawave.com/sites/default/files/dwm1001-api-guide.pdf
+""" 
+    For more info on the documentation go to https://www.decawave.com/sites/default/files/dwm1001-api-guide.pdf
 """
-
-__author__     = "Jorge Pena Queralta"
-__version__    = "0.1"
-__maintainer__ = "Jorge Pena Queralta"
-__email__      = "jopequ@utu.fi"
-__status__     = "Development"
-
 
 import rospy, time, serial, os
 from dwm1001_apiCommands            import DWM1001_API_COMMANDS
 
 from geometry_msgs.msg import Pose
 from geometry_msgs.msg import PoseStamped
-
-
-# initialize ros rate 10hz
-
-
-# initialize serial port connections
-
-
 
 class dwm1001_localizer:
 

@@ -1,13 +1,7 @@
 #!/usr/bin/env python
-""" For more info on the documentation go to https://www.decawave.com/sites/default/files/dwm1001-api-guide.pdf
+""" 
+    For more info on the documentation go to https://www.decawave.com/sites/default/files/dwm1001-api-guide.pdf
 """
-
-__author__     = "Jorge Pena Queralta"
-__version__    = "0.1"
-__maintainer__ = "Jorge Pena Queralta"
-__email__      = "jopequ@utu.fi"
-__status__     = "Development"
-
 
 import rospy, time, serial, os, sys, random
 
@@ -16,10 +10,6 @@ from geometry_msgs.msg  import PoseStamped
 from std_msgs.msg       import Float64
 
 from dwm1001_apiCommands import DWM1001_API_COMMANDS
-
-
-
-
 
 class dwm1001_localizer:
 
@@ -136,7 +126,7 @@ class dwm1001_localizer:
                     first_time = True
                     self.topics[node_id] = rospy.Publisher(
                         '/dwm1001' + 
-                        "".format("/"+self.network if self.use_network else "") + 
+                        "{}".format("/"+self.network if self.use_network else "") + 
                         '/anchor/' + node_id + 
                         "/position", 
                         PoseStamped, 
@@ -144,7 +134,7 @@ class dwm1001_localizer:
                     )
                     self.topics[node_id+"_dist"] = rospy.Publisher(
                         '/dwm1001' + 
-                        "".format("/"+self.network if self.use_network else "") + 
+                        "{}".format("/"+self.network if self.use_network else "") + 
                         '/tag/' + self.tag_name +
                         '/to/anchor/' + node_id +
                         "/distance", 
