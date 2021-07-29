@@ -1,5 +1,5 @@
 
-![example workflow](https://github.com/TIERS/ros-dwm1001-uwb-localization/actions/workflows/main.yml/badge.svg)
+![ROS Melodic build badge](https://github.com/TIERS/ros-dwm1001-uwb-localization/actions/workflows/main.yml/badge.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
