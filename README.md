@@ -1,3 +1,6 @@
+https://github.com/TIERS/ros-dwm1001-uwb-localization/actions/runs/1078463794
+![example workflow](https://github.com/TIERS/ros-dwm1001-uwb-localization/actions/workflows/main.yml/badge.svg)
+
 # ROS Interface Node for DWM1001 Tags
 
 This repo simplifies and extends the interfaces provided by `https://github.com/20chix/dwm1001_ros.git`, with nodes for both active and passive UWB tags. The code has been tested under Ubuntu 16.04/ROS Kinetic and Ubuntu 18.04/ROS Melodic only.
